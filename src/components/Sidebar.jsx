@@ -3,8 +3,7 @@ import { usePlayerStore } from "../store/usePlayerStore";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { Link } from "react-router";
-import { Button } from "@mui/material";
-import Loader from "./Loader";
+import { Button, CircularProgress } from "@mui/material";
 import { useLibrary } from "../hooks/useLibrary";
 import useUser from "../hooks/useUser";
 import { IoPlaySharp } from "react-icons/io5";
@@ -46,7 +45,7 @@ const Sidebar = () => {
     return (
       <div className="flex flex-col h-full w-full min-w-[300px] max-w-[400px] overflow-hidden select-none bg-neutral-800/60 backdrop-blur-lg">
         <div className="w-full h-full flex items-center justify-center">
-          <Loader />
+          <CircularProgress sx={{ color: "#00CDAC" }} />
         </div>
       </div>
     );
