@@ -246,12 +246,13 @@ const RegisterPage = () => {
                 <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
               }
               sx={{
+                fontFamily: "Mulish",
                 fontSize: "16px",
                 padding: "4px 10px",
                 textTransform: "none",
                 backgroundColor: "#00CDAC",
                 color: "black",
-                fontWeight: "600",
+                fontWeight: "700",
                 "&.MuiLoadingButton-root": {
                   backgroundColor: "#00CDAC",
                 },

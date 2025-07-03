@@ -4,6 +4,8 @@ import gif from "../assets/gif3.gif";
 import { useSearchResults } from "../hooks/useSearchResults";
 import { IoPlaySharp } from "react-icons/io5";
 import { IoPauseSharp } from "react-icons/io5";
+import { MdLibraryMusic } from "react-icons/md";
+import { useEffect, useRef, useState } from "react";
 
 const Songs = () => {
   const {
@@ -25,9 +27,50 @@ const Songs = () => {
 
   const songs = data?.songs || [];
 
+  const headerRef = useRef(null);
+  const sentinelRef = useRef(null);
+  const [isStuck, setIsStuck] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsStuck(!entry.isIntersecting);
+      },
+      {
+        root: null,
+        threshold: 0,
+      }
+    );
+
+    const sentinel = sentinelRef.current;
+    if (sentinel) observer.observe(sentinel);
+
+    return () => {
+      if (sentinel) observer.unobserve(sentinel);
+    };
+  }, []);
+
+  if (songs?.length === 0)
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-neutral-400">
+        <MdLibraryMusic size={60} className="mb-4 text-neutral-500" />
+        <h2 className="text-xl font-semibold">No songs found</h2>
+        <p className="text-sm mt-2 text-center max-w-sm">
+          We couldn't find any songs matching your search. Try a different song
+          or keyword.
+        </p>
+      </div>
+    );
+
   return (
-    <div className="bg-neutral-800/60 backdrop-blur-lg">
-      <div className="flex items-center gap-3 text-neutral-400 font-semibold border-b border-neutral-700 mx-5 p-2">
+    <div>
+      <div ref={sentinelRef} className="h-[0px] w-full"></div>
+      <div
+        ref={headerRef}
+        className={`flex sticky top-0 z-20 items-center gap-3 text-neutral-400 font-semibold border-b border-neutral-700 px-7 p-1 transition-colors duration-300 ${
+          isStuck ? `bg-[#303030] shadow-lg` : `bg-transparent`
+        }`}
+      >
         <div className="text-center text-lg w-14">#</div>
         <div className="w-2/3 text-sm">Title</div>
         <div className="w-2/4 text-center text-sm">Album</div>

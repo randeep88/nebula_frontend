@@ -104,7 +104,6 @@ const Header = () => {
       udpateUserMutate(data);
     } catch (err) {
       console.error("Update failed:", err.response?.data || err.message);
-      toast.error("Update failed: " + (err.response?.data?.msg || err.message));
     }
   };
 
@@ -189,8 +188,10 @@ const Header = () => {
             onClick={() => navigate("/login")}
             variant="contained"
             sx={{
+              fontFamily: "Mulish",
+              fontWeight: "700",
               backgroundColor: "#00CDAC",
-              borderRadius: "20px",
+              borderRadius: "9999px",
               color: "#000",
               "&:hover": {
                 backgroundColor: "#00CDACcc",
@@ -203,8 +204,10 @@ const Header = () => {
             onClick={() => navigate("/register")}
             variant="outlined"
             sx={{
+              fontFamily: "Mulish",
+              fontWeight: "700",
               color: "#00CDAC",
-              borderRadius: "20px",
+              borderRadius: "9999px",
               borderColor: "#00CDAC",
               "&:hover": {
                 borderColor: "#00CDAC",
@@ -420,12 +423,13 @@ const Header = () => {
                   <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
                 }
                 sx={{
+                  fontFamily: "Mulish",
+                  fontWeight: "00",
                   fontSize: "16px",
                   padding: "4px 10px",
                   textTransform: "none",
                   backgroundColor: "#00CDAC",
                   color: "black",
-                  fontWeight: "600",
                   "&.MuiLoadingButton-root": {
                     backgroundColor: "#00CDAC",
                   },

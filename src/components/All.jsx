@@ -27,6 +27,8 @@ const All = () => {
   const artists = data?.artists || null;
   const playlists = data?.playlists || [];
 
+  console.log(data);
+
   const handlePlaySong = (song) => {
     setCurrentSong(song);
     setSongsQueue(songs);
@@ -34,7 +36,7 @@ const All = () => {
   };
 
   return (
-    <div className="p-5 bg-neutral-800/60 backdrop-blur-lg">
+    <div className="p-5">
       <div className="flex items-start gap-3 mt-8">
         {/* top result */}
         <div className="w-[450px]">
@@ -58,7 +60,7 @@ const All = () => {
             />
           )}
           {songs && songs.length > 0 ? (
-            <div className="group relative bg-neutral-800/60 hover:bg-neutral-700/60 transition-all p-5 rounded-lg flex flex-col items-start gap-4">
+            <div className="group relative bg-neutral-800/40 hover:bg-neutral-700/60 transition-all p-5 rounded-lg flex flex-col items-start gap-4">
               <div>
                 <img
                   src={songs[0]?.image[2]?.url}

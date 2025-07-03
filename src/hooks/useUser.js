@@ -27,12 +27,6 @@ const useUser = () => {
     retry: false,
   });
 
-  // useEffect(() => {
-  //   if (error?.response?.status === 401) {
-  //     navigate("/login");
-  //   }
-  // }, [error, navigate]);
-
   const isAuthenticated = !!user && !isError;
 
   return { user, isLoadingUser, isAuthenticated };

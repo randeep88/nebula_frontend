@@ -44,7 +44,7 @@ const ArtistPage = () => {
 
   const [seeMoreSongs, setSeeMoreSongs] = useState(false);
 
-  const [gradientColor, setGradientColor] = useState("#1e3264");
+  const [gradientColor, setGradientColor] = useState("#070608");
   const imgRef = useRef(null);
 
   useEffect(() => {
@@ -118,9 +118,19 @@ const ArtistPage = () => {
     },
     onError: (error, artistId, context) => {
       queryClient.setQueryData(["libraryArtists"], context.previousArtists);
-      toast.error(
-        error.response?.data?.message || "Failed to add artist to library"
-      );
+      toast.error("Failed to add artist to library", {
+        style: {
+          border: "1px solid #FF000099",
+          background: "#333333",
+          padding: "10px",
+          color: "#FF0000",
+          fontWeight: "600",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["libraryArtists"] });
@@ -155,7 +165,19 @@ const ArtistPage = () => {
       },
       onError: (error, context) => {
         queryClient.setQueryData(["libraryArtists"], context.previousArtists);
-        toast.error(error.response?.data?.message || "Failed to remove artist");
+        toast.error("Failed to remove artist from library", {
+          style: {
+            border: "1px solid #FF000099",
+            background: "#333333",
+            padding: "10px",
+            color: "#FF0000",
+            fontWeight: "600",
+          },
+          iconTheme: {
+            primary: "#FF0000",
+            secondary: "#FFFAEE",
+          },
+        });
       },
       onSettled: () => {
         queryClient.invalidateQueries({ queryKey: ["libraryArtists"] });
@@ -360,7 +382,19 @@ const ArtistPage = () => {
                 className="text-6xl text-[#00CDAC] cursor-pointer transition-all active:scale-95"
                 onClick={() => {
                   if (artistDetails.topSongs.length === 0)
-                    return toast.error("Artist is empty");
+                    return toast.error("No songs available in this artist", {
+                      style: {
+                        border: "1px solid #FF000099",
+                        background: "#333333",
+                        padding: "10px",
+                        color: "#FF0000",
+                        fontWeight: "600",
+                      },
+                      iconTheme: {
+                        primary: "#FF0000",
+                        secondary: "#FFFAEE",
+                      },
+                    });
                   setSongsQueue(artistDetails.topSongs);
                   setCurrentSong(artistDetails.topSongs[0]);
                   setIsPlaying(true);

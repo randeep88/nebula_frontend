@@ -15,8 +15,8 @@ const HomeLayout = () => {
   const { isPending } = useSearchResults(searchQuery);
 
   return (
-    <div className="w-full h-full select-none overflow-auto scrollbar scrollbar-thumb-neutral-700 scrollbar-track-transparent">
-      <div className="flex sticky bg-neutral-800/60 backdrop-blur-lg z-20 top-0 ps-5 py-3 overflow-x-auto">
+    <div className="w-full h-full flex flex-col select-none">
+      <div className="flex bg-neutral-800/60 backdrop-blur-lg top-0 ps-5 py-3 overflow-x-auto">
         {!isPending ? (
           <div className="space-x-3">
             {categories.map((category) => (
@@ -29,11 +29,13 @@ const HomeLayout = () => {
                   onClick={() => setActive(category)}
                   variant="text"
                   sx={{
+                    fontFamily: "Mulish",
                     borderRadius: "9999px",
                     textTransform: "none",
                     fontSize: "13px",
                     minWidth: "unset",
                     paddingX: 1.5,
+                    fontWeight: "700",
                     paddingY: 0.5,
                     color: active === category ? "black" : "#f5f5f5",
                     backgroundColor: active === category ? "white" : "#303030",
@@ -74,7 +76,7 @@ const HomeLayout = () => {
         )}
       </div>
 
-      <div>
+      <div className="flex-1 h-full bg-neutral-800/60 backdrop-blur-lg flex-grow overflow-auto scrollbar scrollbar-thumb-neutral-700 scrollbar-track-transparent">
         <Outlet />
       </div>
     </div>

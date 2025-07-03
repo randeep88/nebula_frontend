@@ -1,21 +1,31 @@
-import { faCirclePlay } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { Skeleton } from "@mui/material";
 import { capitalizeFirstLetter } from "../utils/capitalizeFirstLetter";
 import { useSearchResults } from "../hooks/useSearchResults";
+import { MdLibraryMusic } from "react-icons/md";
 
 const Artist = () => {
-  const { setCurrentSong, setIsPlaying, searchQuery } = usePlayerStore();
+  const { searchQuery } = usePlayerStore();
 
   const { data, isPending } = useSearchResults(searchQuery);
 
   const artists = data?.artists || null;
-  console.log(artists);
+
+  if (artists?.similarArtists?.length === 0 && !artists)
+    return (
+      <div className="flex flex-col items-center justify-center h-full text-neutral-400">
+        <MdLibraryMusic size={60} className="mb-4 text-neutral-500" />
+        <h2 className="text-xl font-semibold">No artists found</h2>
+        <p className="text-sm mt-2 text-center max-w-sm">
+          We couldn't find any artists matching your search. Try a different
+          artist or keyword.
+        </p>
+      </div>
+    );
 
   return (
-    <div className="p-5 bg-neutral-800/60 backdrop-blur-lg h-screen">
+    <div className="p-5">
       {!isPending ? (
         <div>
           {artists && (

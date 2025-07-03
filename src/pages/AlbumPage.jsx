@@ -32,7 +32,7 @@ const AlbumPage = () => {
     setSongsQueue,
   } = usePlayerStore();
   const navigate = useNavigate();
-  const [gradientColor, setGradientColor] = useState("#1e3264");
+  const [gradientColor, setGradientColor] = useState("#070608");
   const imgRef = useRef(null);
 
   const { data: albumDetails, isPending } = useAlbumData(albumId);
@@ -128,7 +128,19 @@ const AlbumPage = () => {
     },
     onError: (context) => {
       queryClient.setQueryData(["libraryAlbums"], context.previousAlbums);
-      toast.error("Failed to add album to library");
+      toast.error("Failed to add album to library", {
+        style: {
+          border: "1px solid #FF000099",
+          background: "#333333",
+          padding: "10px",
+          color: "#FF0000",
+          fontWeight: "600",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["libraryAlbums"] });
@@ -163,7 +175,19 @@ const AlbumPage = () => {
       },
       onError: (error, albumId, context) => {
         queryClient.setQueryData(["libraryAlbums"], context.previousAlbums);
-        toast.error(error.response?.data?.message || "Failed to remove album");
+        toast.error("Failed to remove album from library", {
+          style: {
+            border: "1px solid #FF000099",
+            background: "#333333",
+            padding: "10px",
+            color: "#FF0000",
+            fontWeight: "600",
+          },
+          iconTheme: {
+            primary: "#FF0000",
+            secondary: "#FFFAEE",
+          },
+        });
       },
       onSettled: () => {
         queryClient.invalidateQueries({ queryKey: ["libraryAlbums"] });
@@ -363,7 +387,19 @@ const AlbumPage = () => {
                 className="text-6xl text-[#00CDAC] cursor-pointer transition-all active:scale-95"
                 onClick={() => {
                   if (albumDetails.songs.length === 0)
-                    return toast.error("Album is empty");
+                    return toast.error("No songs available in this album", {
+                      style: {
+                        border: "1px solid #FF000099",
+                        background: "#333333",
+                        padding: "10px",
+                        color: "#FF0000",
+                        fontWeight: "600",
+                      },
+                      iconTheme: {
+                        primary: "#FF0000",
+                        secondary: "#FFFAEE",
+                      },
+                    });
                   setSongsQueue(albumDetails.songs);
                   setCurrentSong(albumDetails.songs[0]);
                 }}

@@ -288,7 +288,7 @@ const Player = () => {
           <Slider
             valueLabelDisplay="auto"
             size="small"
-            defaultValue={90}
+            defaultValue={60}
             onChange={(e, newValue) => {
               setVolume(e.target.value);
               if (audioRef.current) {
