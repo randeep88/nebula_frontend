@@ -424,7 +424,7 @@ const Header = () => {
                 }
                 sx={{
                   fontFamily: "Mulish",
-                  fontWeight: "00",
+                  fontWeight: "700",
                   fontSize: "16px",
                   padding: "4px 10px",
                   textTransform: "none",
