@@ -6,7 +6,6 @@ import { useMemo } from "react";
 export const useLibrary = () => {
   const token = localStorage.getItem("token");
 
-  // ========== Artist IDs and Details ==========
   const {
     data: artistDetails,
     isPending: isArtistDetailsLoading,
@@ -40,7 +39,6 @@ export const useLibrary = () => {
     },
   });
 
-  // ========== Playlist IDs and Details ==========
   const {
     data: playlistDetails,
     isPending: isPlaylistDetailLoading,
@@ -77,7 +75,6 @@ export const useLibrary = () => {
     },
   });
 
-  // ========== Album IDs and Details ==========
   const {
     data: albumDetails,
     isPending: isAlbumDetailLoading,

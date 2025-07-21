@@ -40,7 +40,6 @@ const ArtistPage = () => {
 
   const { data: artistDetails, isPending } = useArtistData(artistId);
   const { libraryItems } = useLibrary();
-  console.log(artistDetails);
 
   const [seeMoreSongs, setSeeMoreSongs] = useState(false);
 
@@ -84,7 +83,6 @@ const ArtistPage = () => {
       { artistId },
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    console.log("Add artist response:", res.data);
     return res.data;
   };
 
@@ -97,11 +95,8 @@ const ArtistPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log("Remove artist response:", res.data);
     return res.data;
   };
-
-  console.log(gradientColor);
 
   const queryClient = useQueryClient();
 

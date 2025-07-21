@@ -24,7 +24,6 @@ const Sidebar = () => {
   } = usePlayerStore();
 
   const { libraryItems, isLoading, isError } = useLibrary();
-  console.log(libraryItems);
 
   const { isAuthenticated } = useUser();
 

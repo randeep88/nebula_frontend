@@ -27,8 +27,6 @@ const All = () => {
   const artists = data?.artists || null;
   const playlists = data?.playlists || [];
 
-  console.log(data);
-
   const handlePlaySong = (song) => {
     setCurrentSong(song);
     setSongsQueue(songs);
@@ -141,7 +139,7 @@ const All = () => {
                     <div className="flex items-center gap-3">
                       <div className="relative group flex items-center justify-center">
                         <img
-                          src={song.image[2].url}
+                          src={song?.image[2]?.url}
                           className="rounded w-10 overflow-hidden"
                         />
                         <div className="w-10 h-10 absolute bg-black rounded group-hover:bg-opacity-50 bg-opacity-0"></div>

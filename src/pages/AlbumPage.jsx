@@ -37,7 +37,6 @@ const AlbumPage = () => {
 
   const { data: albumDetails, isPending } = useAlbumData(albumId);
 
-  console.log(albumDetails);
   useEffect(() => {
     if (!albumDetails?.image?.[2]?.url || !imgRef.current) return;
 
@@ -94,11 +93,8 @@ const AlbumPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log("Add album response:", res.data);
     return res.data;
   };
-
-  console.log(gradientColor);
 
   const removeAlbum = async (albumId) => {
     if (!token) throw new Error("No token found");
@@ -109,7 +105,6 @@ const AlbumPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log("Remove album response:", res.data);
     return res.data;
   };
 

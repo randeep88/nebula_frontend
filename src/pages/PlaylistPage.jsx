@@ -101,7 +101,6 @@ const PlaylistPage = () => {
       { playlistId },
       { headers: { Authorization: `Bearer ${token}` } }
     );
-    console.log("Add playlist response:", res.data);
     return res.data;
   };
 
@@ -115,7 +114,6 @@ const PlaylistPage = () => {
         headers: { Authorization: `Bearer ${token}` },
       }
     );
-    console.log("Remove playlist response:", res.data);
     return res.data;
   };
 

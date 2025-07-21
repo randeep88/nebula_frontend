@@ -47,7 +47,6 @@ const RegisterPage = () => {
       });
     },
     onError: (err) => {
-      console.log(err.response.data.msg);
       toast.error(err.response.data.msg, {
         style: {
           border: "1px solid #FF000099",
@@ -105,8 +104,6 @@ const RegisterPage = () => {
       setError("profilePic", null);
     }
   };
-
-  console.log(errors);
 
   return (
     <div className="h-screen w-full bg-neutral-900 flex items-center justify-center text-neutral-100">
