@@ -15,12 +15,9 @@ export const useLibrary = () => {
     queryKey: ["libraryArtists"],
     queryFn: async () => {
       if (!token) throw new Error("No token found");
-      const res = await axios.get(
-        "https://nebula-music-player-3.onrender.com/library/artist",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await axios.get("http://localhost:3000/library/artist", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const artistIds = res.data || [];
       const results = await Promise.allSettled(
         artistIds.map(async (artist) => {

@@ -3,15 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { api } from "../utils/api";
 import { toast } from "react-hot-toast";
 
+// https://nebula-music-player-3.onrender.com
+
 export const useLogin = () => {
   const navigate = useNavigate();
 
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: async (data) => {
-      const response = await api.post(
-        "https://nebula-music-player-3.onrender.com/auth/login",
-        data
-      );
+      const response = await api.post("http://localhost:3000/auth/login", data);
       const { token } = response.data;
       localStorage.setItem("token", token);
       console.log(token);
