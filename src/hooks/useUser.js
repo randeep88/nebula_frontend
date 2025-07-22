@@ -16,9 +16,12 @@ const useUser = () => {
     queryKey: ["user"],
     queryFn: async () => {
       if (!token) throw new Error("No token found");
-      const res = await axios.get("http://localhost:3000/auth/me", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await axios.get(
+        "https://nebula-music-player-3.onrender.com/auth/me",
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
       return res.data;
     },
     retry: false,
