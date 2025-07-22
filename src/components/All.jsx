@@ -156,10 +156,10 @@ const All = () => {
                         )}
                       </div>
                       <div>
-                        <h1 className="text-neutral-100 font-semibold truncate overflow-hidden">
+                        <h1 className="text-neutral-100 font-semibold truncate overflow-hidden line-clamp-1 w-96">
                           {song.name}
                         </h1>
-                        <p className="text-neutral-400 group-hover:text-neutral-100 text-sm font-semibold truncate overflow-hidden">
+                        <p className="text-neutral-400 group-hover:text-neutral-100 text-sm font-semibold truncate overflow-hidden line-clamp-1 w-96">
                           {song.artists.primary[0].name}
                         </p>
                       </div>
