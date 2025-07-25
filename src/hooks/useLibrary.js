@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "../utils/api";
 import axios from "axios";
 import { useMemo } from "react";
+import { backendAPI } from "../utils/backendAPI";
 
 export const useLibrary = () => {
   const token = localStorage.getItem("token");
@@ -15,12 +16,9 @@ export const useLibrary = () => {
     queryKey: ["libraryArtists"],
     queryFn: async () => {
       if (!token) throw new Error("No token found");
-      const res = await axios.get(
-        "https://nebula-music-player-3.onrender.com/library/artist",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await backendAPI.get("/library/artist", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const artistIds = res.data || [];
       const results = await Promise.allSettled(
         artistIds.map(async (artist) => {

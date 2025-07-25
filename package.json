@@ -30,6 +30,7 @@
     "framer-motion": "^11.18.2",
     "lucide-react": "^0.510.0",
     "motion": "^12.23.6",
+    "mui-one-time-password-input": "^5.0.0",
     "ogl": "^1.0.11",
     "react": "^19.1.0",
     "react-bits": "^1.0.5",

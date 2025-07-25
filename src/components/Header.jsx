@@ -2,32 +2,29 @@ import SearchIcon from "@mui/icons-material/Search";
 import { usePlayerStore } from "../store/usePlayerStore";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
-import { ChevronUp } from "lucide-react";
+import { ChevronUp, Pencil } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import { Button, Switch } from "@mui/material";
 import useUser from "../hooks/useUser";
 import userPic from "../assets/user.png";
 import "../App.css";
 import { SquarePen } from "lucide-react";
-import axios from "axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { AnimatePresence, motion } from "motion/react";
+import { backendAPI } from "../utils/backendAPI";
+import { MuiOtpInput } from "mui-one-time-password-input";
 
 const udpateUser = async (data) => {
   const token = localStorage.getItem("token");
-  const res = await axios.patch(
-    "https://nebula-music-player-3.onrender.com/auth/user-update",
-    data,
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await backendAPI.patch("/auth/user-update", data, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return res.data;
 };
 const Header = () => {
@@ -42,9 +39,67 @@ const Header = () => {
     setBgColor,
   } = usePlayerStore();
 
+  const { register, handleSubmit, setValue, getValues } = useForm();
   const [openLogoutModal, setOpenLogoutModal] = useState(false);
-
+  const [otpMsg, setOTPMsg] = useState("");
+  const [otp, setOtp] = useState("");
   const navigate = useNavigate();
+  const [isSubmiting, setSubmiting] = useState(false);
+  const [isVerifying, setVerifying] = useState(false);
+
+  console.log("otp", otp);
+  console.log("otpMsg", otpMsg);
+
+  const verifyOTP = async () => {
+    setVerifying(true);
+    const formData = getValues();
+    const email = formData.email;
+    const username = formData.username;
+    const profilePic = formData.profilePic;
+
+    const data = new FormData();
+    data.append("email", email);
+    data.append("username", username);
+    data.append("profilePic", profilePic);
+
+    console.log("verifyOTP", email);
+    const res = await backendAPI.post("/auth/verify-otp", { otp, email });
+    console.log(res.data.success);
+    setVerifying(false);
+    if (res.data.success) {
+      udpateUserMutate(data);
+      setOtp("");
+      setOTPMsg("");
+    }
+  };
+
+  const sendOtp = async ({ email }) => {
+    try {
+      setSubmiting(true);
+      const res = await backendAPI.post("/auth/send-otp", { email });
+      setOTPMsg(res.data.message);
+      setSubmiting(false);
+    } catch (err) {
+      setSubmiting(false);
+      toast.error(err.response.data.msg, {
+        style: {
+          background: "#7f1d1d99",
+          backdropFilter: "blur(5px)",
+          padding: "10px",
+          color: "#fff",
+          fontWeight: "600",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
+    }
+  };
+
+  const handleChange = (otp) => {
+    setOtp(otp);
+  };
 
   const [isAccOpen, setIsAccOpen] = useState(false);
 
@@ -53,33 +108,31 @@ const Header = () => {
   const queryClient = useQueryClient();
   const [newProfile, setNewProfile] = useState(null);
 
-  const { register, handleSubmit, setValue } = useForm();
-
   const { mutate: udpateUserMutate, isPending } = useMutation({
     mutationFn: udpateUser,
     onSuccess: () => {
       queryClient.invalidateQueries(["user"]);
       toast.success("Changes saved!", {
         style: {
-          border: "1px solid #00CDAC99",
-          background: "#333333",
+          background: "#14532d99",
+          backdropFilter: "blur(5px)",
           padding: "10px",
-          color: "#00CDAC",
+          color: "#fff",
           fontWeight: "600",
         },
         iconTheme: {
-          primary: "#00CDAC",
+          primary: "#22c55e",
           secondary: "#FFFAEE",
         },
       });
     },
     onError: () => {
-      toast.error("Error occurred. Check your inputs", {
+      toast.error("User already exists with this email", {
         style: {
-          border: "1px solid #FF000099",
-          background: "#333333",
+          background: "#7f1d1d99",
+          backdropFilter: "blur(5px)",
           padding: "10px",
-          color: "#FF0000",
+          color: "#fff",
           fontWeight: "600",
         },
         iconTheme: {
@@ -91,22 +144,20 @@ const Header = () => {
   });
 
   const onSubmit = async (formData) => {
-    const data = new FormData();
-    data.append("username", formData.username || user?.username);
-    data.append("email", formData.email || user?.email);
-    if (formData.currentPassword)
-      data.append("currentPassword", formData.currentPassword);
-    if (formData.newPassword) data.append("newPassword", formData.newPassword);
-    if (formData.newProfilePic)
-      data.append("newProfilePic", formData.newProfilePic);
+    if (user?.email === formData.email) {
+      const data = new FormData();
+      data.append("username", formData.username || user?.username);
+      data.append("email", formData.email || user?.email);
+      if (formData.newProfilePic)
+        data.append("newProfilePic", formData.newProfilePic);
 
-    try {
-      // for (let pair of data.entries()) {
-      //   console.log(`${pair[0]}:`, pair[1]);
-      // }
-      udpateUserMutate(data);
-    } catch (err) {
-      console.error("Update failed:", err.response?.data || err.message);
+      try {
+        udpateUserMutate(data);
+      } catch (err) {
+        console.error("Update failed:", err.response?.data || err.message);
+      }
+    } else {
+      sendOtp({ email: formData.email });
     }
   };
 
@@ -115,10 +166,10 @@ const Header = () => {
     navigate("/login");
     toast("You're logged out!", {
       style: {
-        border: "1px solid #FFB45699",
-        background: "#333333",
+        background: "#78350f99",
+        backdropFilter: "blur(5px)",
         padding: "10px",
-        color: "#FFB456",
+        color: "#fff",
         fontWeight: "600",
       },
       icon: "⚠️",
@@ -128,10 +179,10 @@ const Header = () => {
   const giveWarning = () => {
     toast("Enabling this effect may cause lag", {
       style: {
-        border: "1px solid #FFB45699",
-        background: "#333333",
+        background: "#78350f99",
+        backdropFilter: "blur(5px)",
         padding: "10px",
-        color: "#FFB456",
+        color: "#fff",
         fontWeight: "600",
       },
       icon: "⚠️",
@@ -426,12 +477,16 @@ const Header = () => {
                       ? URL.createObjectURL(newProfile)
                       : user?.profilePic
                   }
-                  className="w-40 h-40 object-cover rounded-full"
+                  className="w-44 h-44 object-cover rounded-full border-2 border-neutral-600"
                   alt="Profile"
                 />
-                <div className=" group-hover:opacity-100 bg-black/50 group transition-all rounded-full opacity-0 top-0 absolute w-40 h-40 flex items-center justify-center">
+                <div className="transition-all group hover:bg-neutral-800 border-2 border-neutral-600 bg-neutral-700 w-8 h-8 rounded-full top-32 right-2 absolute flex items-center justify-center">
                   <label htmlFor="preview">
-                    <SquarePen className="group-hover:opacity-100" />
+                    <Pencil
+                      size={17}
+                      color="#d4d4d4"
+                      className="active:scale-95 transition-all"
+                    />
                   </label>
                   <input
                     hidden
@@ -471,68 +526,107 @@ const Header = () => {
                     {...register("email")}
                   />
                 </div>
-                <div className="flex items-center justify-between gap-3">
-                  <label htmlFor="currentPassword">Current password</label>
-                  <input
-                    disabled={isLoadingUser || isPending}
-                    className="w-64 border-2 focus:border-white transition-all p-2 rounded text-neutral-100 focus:outline-none font-semibold bg-transparent border-neutral-600"
-                    type="password"
-                    id="currentPassword"
-                    {...register("currentPassword")}
-                  />
-                </div>
-                <div className="flex items-center justify-between gap-3">
-                  <label htmlFor="newPassword">New password</label>
-                  <input
-                    disabled={isLoadingUser || isPending}
-                    className="w-64 border-2 focus:border-white transition-all p-2 rounded text-neutral-100 focus:outline-none font-semibold bg-transparent border-neutral-600"
-                    type="password"
-                    id="newPassword"
-                    {...register("newPassword")}
-                  />
-                </div>
-                <div className="flex items-center justify-between gap-3">
-                  <label htmlFor="confirmPassword">Confirm password</label>
-                  <input
-                    disabled={isLoadingUser || isPending}
-                    className="w-64 border-2 focus:border-white transition-all p-2 rounded text-neutral-100 focus:outline-none font-semibold bg-transparent border-neutral-600"
-                    type="password"
-                    id="confirmPassword"
-                  />
-                </div>
-                <span className="text-neutral-400 text-sm text-center">
-                  Always provide current password to proceed
-                </span>
-                <Button
-                  type="submit"
-                  loading={isLoadingUser || isPending}
-                  fullWidth
-                  variant="contained"
-                  loadingIndicator={
-                    <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-                  }
-                  sx={{
-                    fontFamily: "Mulish",
-                    fontWeight: "700",
-                    fontSize: "16px",
-                    padding: "4px 10px",
-                    textTransform: "none",
-                    backgroundColor: "#00CDAC",
-                    color: "black",
-                    "&.MuiLoadingButton-root": {
+
+                {otpMsg && (
+                  <div className="flex items-center justify-center">
+                    <MuiOtpInput
+                      value={otp}
+                      onChange={handleChange}
+                      length={4}
+                      className="w-80"
+                      TextFieldsProps={{
+                        sx: {
+                          input: {
+                            color: "#ffffff",
+                            backgroundColor: "#1f1f1f",
+                            borderRadius: "8px",
+                            padding: "12px",
+                          },
+                          "& .MuiOutlinedInput-root": {
+                            "& fieldset": {
+                              borderColor: "#999",
+                            },
+                            "&:hover fieldset": {
+                              borderColor: "#ccc",
+                            },
+                            "&.Mui-focused fieldset": {
+                              borderColor: "#00CDAC",
+                            },
+                          },
+                        },
+                      }}
+                    />
+                  </div>
+                )}
+
+                {otpMsg && (
+                  <p className="text-sm text-[#00CDAC] text-center">{otpMsg}</p>
+                )}
+
+                {otpMsg ? (
+                  <Button
+                    onClick={verifyOTP}
+                    type="submit"
+                    loading={isVerifying}
+                    fullWidth
+                    variant="contained"
+                    loadingIndicator={
+                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                    }
+                    sx={{
+                      fontFamily: "Mulish",
+                      fontSize: "16px",
+                      padding: "4px 10px",
+                      textTransform: "none",
                       backgroundColor: "#00CDAC",
-                    },
-                    "&.Mui-disabled": {
+                      color: "black",
+                      fontWeight: "700",
+                      "&.MuiLoadingButton-root": {
+                        backgroundColor: "#00CDAC",
+                      },
+                      "&.Mui-disabled": {
+                        backgroundColor: "#00CDAC",
+                        opacity: 1,
+                      },
+                      "&:hover": {
+                        backgroundColor: "#00CDACcc",
+                      },
+                    }}
+                  >
+                    Verify OTP
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    loading={isSubmiting || isPending}
+                    fullWidth
+                    variant="contained"
+                    loadingIndicator={
+                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                    }
+                    sx={{
+                      fontFamily: "Mulish",
+                      fontWeight: "700",
+                      fontSize: "16px",
+                      padding: "4px 10px",
+                      textTransform: "none",
                       backgroundColor: "#00CDAC",
-                      opacity: 1,
-                    },
-                    "&:hover": {
-                      backgroundColor: "#00CDACcc",
-                    },
-                  }}
-                >
-                  Save
-                </Button>
+                      color: "black",
+                      "&.MuiLoadingButton-root": {
+                        backgroundColor: "#00CDAC",
+                      },
+                      "&.Mui-disabled": {
+                        backgroundColor: "#00CDAC",
+                        opacity: 1,
+                      },
+                      "&:hover": {
+                        backgroundColor: "#00CDACcc",
+                      },
+                    }}
+                  >
+                    Save
+                  </Button>
+                )}
               </div>
 
               <div

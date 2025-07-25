@@ -15,6 +15,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "react-hot-toast";
 import TopAlbums from "./pages/TopAlbums";
 import Singles from "./pages/Singles";
+import OTPPage from "./pages/OTPPage.jsx";
+import OTPForRegister from "./pages/OTPForRegister.jsx";
 
 const App = () => {
   const queryClient = new QueryClient({
@@ -48,6 +50,8 @@ const App = () => {
               <Route path="/album/:albumId" element={<AlbumPage />} />
               <Route path="/playlist/:playlistId" element={<PlaylistPage />} />
             </Route>
+            <Route path="/otp" element={<OTPPage />} />
+            <Route path="/otp-register" element={<OTPForRegister />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Routes>

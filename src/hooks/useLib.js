@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { useMemo } from "react";
+import { backendAPI } from "../utils/backendAPI";
 
 const useLib = () => {
   const token = localStorage.getItem("token");
@@ -13,12 +14,9 @@ const useLib = () => {
     queryKey: ["library"],
     queryFn: async () => {
       if (!token) throw new Error("No token found");
-      const res = await axios.get(
-        "https://nebula-music-player-3.onrender.com/library",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const res = await backendAPI.get("/library", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       const data = res.data;
       return data || [];
     },

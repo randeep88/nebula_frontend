@@ -288,10 +288,12 @@ const Player = () => {
 
         {isAuthenticated && (
           <div className="relative group flex items-center justify-center">
-            <DownloadButton
-              songURL={currentSong.downloadUrl[4].url}
-              songName={currentSong.name}
-            />
+            {currentSong?.downloadUrl[4]?.url && (
+              <DownloadButton
+                songURL={currentSong?.downloadUrl[4]?.url}
+                songName={currentSong?.name}
+              />
+            )}
             <div className="absolute bottom-8 group-hover:visible delay-1000 text-xs invisible text-neutral-100 w-[6.5rem] text-center bg-neutral-700 font-semibold p-1 rounded">
               Download song in 320kbps
             </div>

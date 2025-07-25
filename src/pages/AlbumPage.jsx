@@ -125,10 +125,10 @@ const AlbumPage = () => {
       queryClient.setQueryData(["libraryAlbums"], context.previousAlbums);
       toast.error("Failed to add album to library", {
         style: {
-          border: "1px solid #FF000099",
-          background: "#333333",
+          background: "#7f1d1d99",
+          backdropFilter: "blur(5px)",
           padding: "10px",
-          color: "#FF0000",
+          color: "#fff",
           fontWeight: "600",
         },
         iconTheme: {
@@ -143,14 +143,14 @@ const AlbumPage = () => {
     onSuccess: (data) => {
       toast.success("Album added to your library", {
         style: {
-          border: "1px solid #00CDAC99",
-          background: "#333333",
+          background: "#14532d99",
+          backdropFilter: "blur(5px)",
           padding: "10px",
-          color: "#00CDAC",
+          color: "#fff",
           fontWeight: "600",
         },
         iconTheme: {
-          primary: "#00CDAC",
+          primary: "#22c55e",
           secondary: "#FFFAEE",
         },
       });
@@ -168,14 +168,14 @@ const AlbumPage = () => {
         );
         return { previousAlbums };
       },
-      onError: (error, albumId, context) => {
+      onError: (context) => {
         queryClient.setQueryData(["libraryAlbums"], context.previousAlbums);
         toast.error("Failed to remove album from library", {
           style: {
-            border: "1px solid #FF000099",
-            background: "#333333",
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
             padding: "10px",
-            color: "#FF0000",
+            color: "#fff",
             fontWeight: "600",
           },
           iconTheme: {
@@ -190,14 +190,14 @@ const AlbumPage = () => {
       onSuccess: (data) => {
         toast.success("Album removed from your library", {
           style: {
-            border: "1px solid #00CDAC99",
-            background: "#333333",
+            background: "#14532d99",
+            backdropFilter: "blur(5px)",
             padding: "10px",
-            color: "#00CDAC",
+            color: "#fff",
             fontWeight: "600",
           },
           iconTheme: {
-            primary: "#00CDAC",
+            primary: "#22c55e",
             secondary: "#FFFAEE",
           },
         });
@@ -384,10 +384,10 @@ const AlbumPage = () => {
                   if (albumDetails.songs.length === 0)
                     return toast.error("No songs available in this album", {
                       style: {
-                        border: "1px solid #FF000099",
-                        background: "#333333",
+                        background: "#7f1d1d99",
+                        backdropFilter: "blur(5px)",
                         padding: "10px",
-                        color: "#FF0000",
+                        color: "#fff",
                         fontWeight: "600",
                       },
                       iconTheme: {

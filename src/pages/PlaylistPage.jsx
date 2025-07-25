@@ -145,10 +145,10 @@ const PlaylistPage = () => {
         );
         toast.error("Failed to add playlist to library", {
           style: {
-            border: "1px solid #FF000099",
-            background: "#333333",
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
             padding: "10px",
-            color: "#FF0000",
+            color: "#fff",
             fontWeight: "600",
           },
           iconTheme: {
@@ -163,14 +163,14 @@ const PlaylistPage = () => {
       onSuccess: (data) => {
         toast.success("Playlist added to your library", {
           style: {
-            border: "1px solid #00CDAC99",
-            background: "#333333",
+            background: "#14532d99",
+            backdropFilter: "blur(5px)",
             padding: "10px",
-            color: "#00CDAC",
+            color: "#fff",
             fontWeight: "600",
           },
           iconTheme: {
-            primary: "#00CDAC",
+            primary: "#22c55e",
             secondary: "#FFFAEE",
           },
         });
@@ -197,10 +197,10 @@ const PlaylistPage = () => {
         );
         toast.error("Failed to remove playlist from library", {
           style: {
-            border: "1px solid #FF000099",
-            background: "#333333",
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
             padding: "10px",
-            color: "#FF0000",
+            color: "#fff",
             fontWeight: "600",
           },
           iconTheme: {
@@ -215,14 +215,14 @@ const PlaylistPage = () => {
       onSuccess: (data) => {
         toast.success("Playlist removed from your library", {
           style: {
-            border: "1px solid #00CDAC99",
-            background: "#333333",
+            background: "#14532d99",
+            backdropFilter: "blur(5px)",
             padding: "10px",
-            color: "#00CDAC",
+            color: "#fff",
             fontWeight: "600",
           },
           iconTheme: {
-            primary: "#00CDAC",
+            primary: "#22c55e",
             secondary: "#FFFAEE",
           },
         });
@@ -377,10 +377,10 @@ const PlaylistPage = () => {
                   if (playlistDetails.songs.length === 0)
                     return toast.error("No songs available in this playlist", {
                       style: {
-                        border: "1px solid #FF000099",
-                        background: "#333333",
+                        background: "#7f1d1d99",
+                        backdropFilter: "blur(5px)",
                         padding: "10px",
-                        color: "#FF0000",
+                        color: "#fff",
                         fontWeight: "600",
                       },
                       iconTheme: {
