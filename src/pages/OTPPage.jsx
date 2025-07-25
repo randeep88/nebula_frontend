@@ -29,8 +29,6 @@ const OTPPage = () => {
     setOtp(otp);
   };
 
-  if (isPending) return <p>Loading...</p>;
-
   return (
     <div className="h-screen w-full bg-neutral-900 flex flex-col items-center justify-center text-neutral-100">
       <div className="mb-10 flex-col flex items-center  w-80">
@@ -73,7 +71,7 @@ const OTPPage = () => {
         <Button
           onClick={verifyOTP}
           type="submit"
-          // loading={isPending}
+          loading={isPending}
           fullWidth
           variant="contained"
           loadingIndicator={
