@@ -1,4 +1,4 @@
-🚨 ACCESS THE NEBULA BACKEND REPO USING THIS LINK: https://github.com/randeep88/nebula-backend.git
+🚨 ACCESS THE NEBULA BACKEND REPO USING THIS LINK: https://github.com/randeep88/nebula_backend.git
 
 # React + Vite
 
