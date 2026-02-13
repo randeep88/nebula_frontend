@@ -25,14 +25,22 @@ const LoginPage = () => {
     try {
       const res = await backendAPI.post("/auth/send-otp", {
         email: data.email,
+        purpose: "login",
       });
 
       if (res.data.success) {
-        toast.success(res.data.message);
         localStorage.setItem("emailForOTP", data.email);
         navigate("/otp");
       } else {
-        toast.error(res.data.message || "Failed to send OTP");
+        toast.error(res.data.message || "Failed to send OTP", {
+          style: {
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
+            padding: "10px",
+            color: "#fff",
+            fontWeight: "600",
+          },
+        });
       }
     } catch (error) {
       if (error.response) {
@@ -40,11 +48,35 @@ const LoginPage = () => {
           error.response.data?.message ||
           error.response.data?.msg ||
           "Failed to send OTP. Please try again.";
-        toast.error(errorMessage);
+        toast.error(errorMessage, {
+          style: {
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
+            padding: "10px",
+            color: "#fff",
+            fontWeight: "600",
+          },
+        });
       } else if (error.request) {
-        toast.error("No response from server. Please check your connection.");
+        toast.error("No response from server. Please check your connection.", {
+          style: {
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
+            padding: "10px",
+            color: "#fff",
+            fontWeight: "600",
+          },
+        });
       } else {
-        toast.error("Failed to send OTP. Please try again.");
+        toast.error("Failed to send OTP. Please try again.", {
+          style: {
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
+            padding: "10px",
+            color: "#fff",
+            fontWeight: "600",
+          },
+        });
       }
       console.error("Error sending OTP:", error);
     } finally {

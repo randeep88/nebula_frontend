@@ -30,7 +30,19 @@ const OTPPage = () => {
 
   const verifyOTP = async () => {
     if (otp.length !== 4) {
-      toast.error("Please enter a valid 4-digit OTP");
+      toast.error("Please enter a valid 4-digit OTP", {
+        style: {
+          background: "#7f1d1d99",
+          backdropFilter: "blur(5px)",
+          padding: "10px",
+          color: "#fff",
+          fontWeight: "600",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
       return;
     }
 
@@ -38,20 +50,6 @@ const OTPPage = () => {
       const res = await backendAPI.post("/auth/verify-otp", { otp, email });
 
       if (res.data.success) {
-        toast.success(res.data.message, {
-          style: {
-            background: "#065f4699",
-            backdropFilter: "blur(5px)",
-            padding: "10px",
-            color: "#fff",
-            fontWeight: "600",
-          },
-          iconTheme: {
-            primary: "#00CDAC",
-            secondary: "#FFFAEE",
-          },
-        });
-
         if (isRegisterFlow) {
           navigate("/login");
         } else {
@@ -59,12 +57,36 @@ const OTPPage = () => {
           loginMutate({ email });
         }
       } else {
-        toast.error(res.data.msg || "OTP verification failed");
+        toast.error(res.data.msg || "OTP verification failed", {
+          style: {
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
+            padding: "10px",
+            color: "#fff",
+            fontWeight: "600",
+          },
+          iconTheme: {
+            primary: "#FF0000",
+            secondary: "#FFFAEE",
+          },
+        });
       }
     } catch (error) {
       const errorMessage =
         error.response?.data?.msg || "Failed to verify OTP. Please try again.";
-      toast.error(errorMessage);
+      toast.error(errorMessage, {
+        style: {
+          background: "#7f1d1d99",
+          backdropFilter: "blur(5px)",
+          padding: "10px",
+          color: "#fff",
+          fontWeight: "600",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
     }
   };
 
@@ -90,13 +112,37 @@ const OTPPage = () => {
         });
         setOtp("");
       } else {
-        toast.error(res.data.message);
+        toast.error(res.data.message, {
+          style: {
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
+            padding: "10px",
+            color: "#fff",
+            fontWeight: "600",
+          },
+          iconTheme: {
+            primary: "#FF0000",
+            secondary: "#FFFAEE",
+          },
+        });
       }
     } catch (error) {
       const errorMessage =
         error.response?.data?.message ||
         "Failed to resend OTP. Please try again.";
-      toast.error(errorMessage);
+      toast.error(errorMessage, {
+        style: {
+          background: "#7f1d1d99",
+          backdropFilter: "blur(5px)",
+          padding: "10px",
+          color: "#fff",
+          fontWeight: "600",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
     } finally {
       setResending(false);
     }

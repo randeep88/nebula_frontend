@@ -23,7 +23,19 @@ const RegisterPage = () => {
     const file = e.target.files?.[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) {
-        toast.error("Image size should be less than 5MB");
+        toast.error("Image size should be less than 5MB", {
+          style: {
+            background: "#7f1d1d99",
+            backdropFilter: "blur(5px)",
+            padding: "10px",
+            color: "#fff",
+            fontWeight: "600",
+          },
+          iconTheme: {
+            primary: "#FF0000",
+            secondary: "#FFFAEE",
+          },
+        });
         e.target.value = "";
         return;
       }
@@ -60,7 +72,19 @@ const RegisterPage = () => {
     } catch (err) {
       const errorMessage =
         err.response?.data?.msg || err.message || "Registration failed";
-      toast.error(errorMessage);
+      toast.error(errorMessage, {
+        style: {
+          background: "#7f1d1d99",
+          backdropFilter: "blur(5px)",
+          padding: "10px",
+          color: "#fff",
+          fontWeight: "600",
+        },
+        iconTheme: {
+          primary: "#FF0000",
+          secondary: "#FFFAEE",
+        },
+      });
       console.error("Registration failed:", err.response?.data || err.message);
     }
   };

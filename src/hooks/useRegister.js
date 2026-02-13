@@ -26,7 +26,7 @@ export const useRegister = () => {
       setRegisterData({ email, username, profilePic });
 
       try {
-        await backendAPI.post("/auth/send-otp", { email });
+        await backendAPI.post("/auth/send-otp", { email, purpose: "register" });
 
         toast.success("Registration successful! Please verify your email.", {
           style: {
@@ -48,11 +48,15 @@ export const useRegister = () => {
           "Registration successful but failed to send OTP. Please login to resend.",
           {
             style: {
-              background: "#7f1d1d99",
+              background: "#14532d99",
               backdropFilter: "blur(5px)",
               padding: "10px",
               color: "#fff",
               fontWeight: "600",
+            },
+            iconTheme: {
+              primary: "#22c55e",
+              secondary: "#FFFAEE",
             },
           },
         );
