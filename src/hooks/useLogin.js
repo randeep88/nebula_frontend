@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { backendAPI } from "../utils/backendAPI";
 import { toast } from "react-hot-toast";
 
-// https://nebula-music-player-3.onrender.com
-
 export const useLogin = () => {
   const navigate = useNavigate();
 

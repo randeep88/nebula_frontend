@@ -51,7 +51,7 @@ const App = () => {
               <Route path="/playlist/:playlistId" element={<PlaylistPage />} />
             </Route>
             <Route path="/otp" element={<OTPPage />} />
-            <Route path="/otp-register" element={<OTPForRegister />} />
+            <Route path="/otp-register" element={<OTPPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Routes>

@@ -5,13 +5,11 @@ import { useLogin } from "../hooks/useLogin";
 import "../App.css";
 import { Button } from "@mui/material";
 import { backendAPI } from "../utils/backendAPI";
-
-const sendOtp = async (email, purpose) => {
-  await backendAPI.post("/auth/send-otp", { email, purpose });
-  localStorage.setItem("emailForOTP", email);
-};
+import { useState } from "react";
+import toast from "react-hot-toast";
 
 const LoginPage = () => {
+  const [sendingOTP, setSendingOTP] = useState(false);
   const {
     register,
     handleSubmit,
@@ -19,19 +17,46 @@ const LoginPage = () => {
   } = useForm();
 
   const navigate = useNavigate();
+  const { isPending } = useLogin();
 
-  const { loginMutate, isPending } = useLogin();
+  const onSubmit = async (data) => {
+    setSendingOTP(true);
 
-  const onSubmit = (data) => {
-    sendOtp(data.email, "login");
-    navigate("/otp");
+    try {
+      const res = await backendAPI.post("/auth/send-otp", {
+        email: data.email,
+      });
+
+      if (res.data.success) {
+        toast.success(res.data.message);
+        localStorage.setItem("emailForOTP", data.email);
+        navigate("/otp");
+      } else {
+        toast.error(res.data.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      if (error.response) {
+        const errorMessage =
+          error.response.data?.message ||
+          error.response.data?.msg ||
+          "Failed to send OTP. Please try again.";
+        toast.error(errorMessage);
+      } else if (error.request) {
+        toast.error("No response from server. Please check your connection.");
+      } else {
+        toast.error("Failed to send OTP. Please try again.");
+      }
+      console.error("Error sending OTP:", error);
+    } finally {
+      setSendingOTP(false);
+    }
   };
 
   return (
     <div className="h-screen w-full bg-neutral-900 flex items-center justify-center text-neutral-100">
       <div className="py-20 px-20 rounded-xl">
         <div className="flex flex-col items-center justify-center w-full mb-10">
-          <img src={logo} className="w-20" alt="" />
+          <img src={logo} className="w-20" alt="Nebula Logo" />
           <h2 className="text-4xl logoFont text-center select-none font-extrabold text-white">
             Login to <br /> start listening
           </h2>
@@ -42,64 +67,57 @@ const LoginPage = () => {
               Email
             </label>
             <input
-              disabled={isPending}
+              disabled={isPending || sendingOTP}
               id="email"
-              type="email" 
+              type="email"
               name="email"
               placeholder="Email"
-              {...register("email", { required: "Email is required" })}
+              {...register("email", {
+                required: "Email is required",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Invalid email address",
+                },
+              })}
               className="w-80 border-2 focus:border-white transition-all p-2 rounded text-neutral-100 focus:outline-none font-semibold bg-transparent border-neutral-600"
             />
+            {errors.email && (
+              <span className="text-red-500 text-sm block mt-1">
+                {errors.email.message}
+              </span>
+            )}
           </div>
-          {errors && (
-            <span className="text-red-500">{errors?.email?.message}</span>
-          )}
-          {/* <div>
-            <label htmlFor="password" className="block text-sm font-bold mb-1">
-              Password
-            </label>
-            <input
-              disabled={isPending}
-              id="password"
-              type="password"
-              name="password"
-              placeholder="Password"
-              {...register("password", { required: "Password is required" })}
-              className="w-80 border-2 focus:border-white transition-all p-2 rounded text-neutral-100 focus:outline-none font-semibold bg-transparent border-neutral-600"
-            />
-          </div>
-          {errors && (
-            <span className="text-red-500">{errors?.password?.message}</span>
-          )} */}
+
           <Button
             type="submit"
-            loading={isPending}
+            disabled={isPending || sendingOTP}
             fullWidth
             variant="contained"
-            loadingIndicator={
-              <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
-            }
             sx={{
               fontFamily: "Mulish",
               fontSize: "16px",
-              padding: "4px 10px",
+              padding: "8px 10px",
               textTransform: "none",
               backgroundColor: "#00CDAC",
               color: "black",
               fontWeight: "700",
-              "&.MuiLoadingButton-root": {
-                backgroundColor: "#00CDAC",
-              },
               "&.Mui-disabled": {
                 backgroundColor: "#00CDAC",
-                opacity: 1,
+                opacity: 0.6,
               },
               "&:hover": {
                 backgroundColor: "#00CDACcc",
               },
             }}
           >
-            Send OTP
+            {sendingOTP ? (
+              <span className="flex items-center gap-2">
+                <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                Sending OTP...
+              </span>
+            ) : (
+              "Send OTP"
+            )}
           </Button>
         </form>
 
