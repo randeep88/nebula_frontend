@@ -47,9 +47,6 @@ const Header = () => {
   const [isSubmiting, setSubmiting] = useState(false);
   const [isVerifying, setVerifying] = useState(false);
 
-  console.log("otp", otp);
-  console.log("otpMsg", otpMsg);
-
   const verifyOTP = async () => {
     setVerifying(true);
     const formData = getValues();

@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import { backendAPI } from "../utils/backendAPI";
 
 const useUser = () => {
@@ -9,7 +8,6 @@ const useUser = () => {
     data: user,
     isPending: isLoadingUser,
     isError,
-    error,
   } = useQuery({
     queryKey: ["user"],
     queryFn: async () => {
